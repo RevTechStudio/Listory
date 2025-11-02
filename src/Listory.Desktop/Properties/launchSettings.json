@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Listory.Desktop": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

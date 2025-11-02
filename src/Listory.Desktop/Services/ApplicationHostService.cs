@@ -1,21 +1,22 @@
-﻿using Listory.Desktop.Views.Windows;
+﻿using Listory.Desktop.Configuration;
+using Listory.Desktop.Views.Pages;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Wpf.Ui;
+using Wpf.Ui.Appearance;
 
 namespace Listory.Desktop.Services;
 
 /// <summary>
 /// アプリケーションのライフサイクル管理サービス
 /// </summary>
-/// <param name="serviceProvider">サービスプロバイダー</param>
-/// <param name="logger">ロガー</param>
-public class ApplicationHostService(IServiceProvider serviceProvider, ILogger<ApplicationHostService> logger) : IHostedService
+public class ApplicationHostService(IServiceProvider serviceProvider, ILogger<ApplicationHostService> logger, IOptions<DesktopSettings> options) : IHostedService
 {
     /// <summary>
-    /// メインウィンドウ
+    /// メインウィンドウのナビゲーションインターフェース
     /// </summary>
-    private readonly MainWindow mainWindow = serviceProvider.GetService(typeof(MainWindow)) as MainWindow ??
-        throw new InvalidOperationException("MainWindowの取得に失敗しました。");
+    private readonly INavigationWindow mainWindow = (serviceProvider.GetService(typeof(INavigationWindow)) as INavigationWindow)!;
 
     /// <summary>
     /// アプリケーションを開始します。
@@ -26,7 +27,9 @@ public class ApplicationHostService(IServiceProvider serviceProvider, ILogger<Ap
     {
         logger.LogInformation("===================================");
         logger.LogInformation("アプリケーションを起動しています...");
-        mainWindow.Show();
+        mainWindow.ShowWindow();
+        ApplicationThemeManager.Apply(options.Value.ApplicationTheme, options.Value.WindowBackdropType);
+        mainWindow.Navigate(typeof(DashboardPage));
         await Task.CompletedTask;
     }
 
