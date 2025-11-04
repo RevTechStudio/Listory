@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listory.Desktop", "src\List
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listory.Api", "src\Listory.Api\Listory.Api.csproj", "{5146168F-3C5F-4BD1-AEAC-35F1D90DF550}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Listory.Web", "src\Listory.Web\Listory.Web.csproj", "{67041A3F-3FBA-44ED-BD9C-8F425394D7A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{5146168F-3C5F-4BD1-AEAC-35F1D90DF550}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5146168F-3C5F-4BD1-AEAC-35F1D90DF550}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5146168F-3C5F-4BD1-AEAC-35F1D90DF550}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67041A3F-3FBA-44ED-BD9C-8F425394D7A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67041A3F-3FBA-44ED-BD9C-8F425394D7A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67041A3F-3FBA-44ED-BD9C-8F425394D7A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67041A3F-3FBA-44ED-BD9C-8F425394D7A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
