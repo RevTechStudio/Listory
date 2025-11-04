@@ -20,4 +20,9 @@ public class CheckListTemplate : CheckListBase
     /// テンプレートのステータス
     /// </summary>
     public CheckListTemplateStatus Status { get; set; } = CheckListTemplateStatus.Active;
+
+    /// <summary>
+    /// テンプレートの構成要素（子要素、項目など）
+    /// </summary>
+    public ICollection<CheckListTemplateStructure> Structures { get; set; } = [];
 }

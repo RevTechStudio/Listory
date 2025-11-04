@@ -1,6 +1,4 @@
-﻿using Listory.Core.Models.Entities;
-
-namespace Listory.Core.Models.Abstractions;
+﻿namespace Listory.Core.Models.Abstractions;
 
 /// <summary>
 /// チェックリストの基底となる抽象クラス
@@ -10,7 +8,7 @@ public abstract class CheckListBase
     /// <summary>
     /// 一意識別子
     /// </summary>
-    public Guid Id { get; set; }　= Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// チェックリスト名
@@ -31,9 +29,4 @@ public abstract class CheckListBase
     /// 作成者
     /// </summary>
     public string? CreatedBy { get; set; }
-
-    /// <summary>
-    /// チェックリストの構成要素（子要素、項目など）
-    /// </summary>
-    public ICollection<CheckListStructure> Structures { get; set; } = [];
 }

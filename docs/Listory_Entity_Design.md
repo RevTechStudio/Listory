@@ -19,13 +19,17 @@
 
 ```mermaid
 erDiagram
-    CheckListBase ||--o{ CheckListStructure : contains
+    CheckList ||--o{ CheckListStructure : contains
+    CheckListTemplate ||--o{ CheckListTemplateStructure : contains
     CheckList ||--|| CheckListBase : inherits
     CheckListTemplate ||--|| CheckListBase : inherits
     CheckListStructure ||--o{ CheckListStructure : has_children
     CheckListStructure }o--|| CheckListStructure : parent
     CheckListStructure }o--|| CheckListItem : references
     CheckListStructure ||--o| CheckListLogNote : has
+    CheckListTemplateStructure ||--o{ CheckListTemplateStructure : has_children
+    CheckListTemplateStructure }o--|| CheckListTemplateStructure : parent
+    CheckListTemplateStructure }o--|| CheckListItem : references
     CheckListItem ||--o| CheckListReferenceNote : has
     CheckListBaseNote ||--o{ NoteFileAttachment : has
     CheckListReferenceNote ||--|| CheckListBaseNote : inherits
@@ -60,6 +64,13 @@ erDiagram
         bool IsCompleted
         DateTime CompletedAt
         string CompletedBy
+    }
+
+    CheckListTemplateStructure {
+        Guid Id
+        Guid CheckListTemplateId
+        Guid CheckListItemId
+        Guid ParentStructureId
     }
 
     CheckListItem {
@@ -110,7 +121,6 @@ CheckList と CheckListTemplate の共通基底クラス。
 | Description | string | チェックリストの説明 |
 | CreatedAt | DateTime? | 作成日 |
 | CreatedBy | string? | 作成者 |
-| Structures | ICollection\<CheckListStructure\> | チェックリストの構成要素 |
 
 ### 📋 CheckList
 
@@ -121,6 +131,7 @@ CheckList と CheckListTemplate の共通基底クラス。
 | TemplateId | Guid | テンプレートの一意識別子 |
 | TemplateVersion | int | テンプレートのバージョン |
 | Status | CheckListStatus | チェックリストの状態 |
+| Structures | ICollection\<CheckListStructure\> | チェックリストの構成要素 |
 
 #### CheckListStatus（Enum）
 
@@ -137,6 +148,7 @@ CheckList と CheckListTemplate の共通基底クラス。
 | TemplateId | Guid | テンプレートの一意識別子（全バージョンで共通） |
 | Version | int | テンプレートのバージョン |
 | Status | CheckListTemplateStatus | テンプレートのステータス |
+| Structures | ICollection\<CheckListTemplateStructure\> | テンプレートの構成要素 |
 
 #### CheckListTemplateStatus（Enum）
 
@@ -169,6 +181,27 @@ CheckList と CheckListTemplate の共通基底クラス。
 - **Parent / Child 両方の参照**を保持
 - **チェック状態 + 記録情報** を統合的に管理
 - **CompletedAt / CompletedBy** により履歴的な情報を保持
+
+### 🧱 CheckListTemplateStructure
+
+チェックリストテンプレートの構成情報を表す。
+
+| プロパティ | 型 | 説明 |
+|-------------|----|------|
+| Id | Guid | 一意識別子 |
+| CheckListTemplateId | Guid | 所属するチェックリストテンプレートID |
+| CheckListTemplate | CheckListTemplate | チェックリストテンプレートへの参照 |
+| CheckListItemId | Guid | チェック項目ID |
+| CheckListItem | CheckListItem | チェック項目への参照 |
+| ParentStructureId | Guid? | 親ノードのID（ルートの場合はnull） |
+| ParentStructure | CheckListTemplateStructure? | 親構成への参照 |
+| ChildStructures | ICollection\<CheckListTemplateStructure\> | 子構成リスト |
+
+#### CheckListTemplateStructureの特徴
+
+- **Parent / Child 両方の参照**を保持
+- **チェック状態は持たない**（テンプレートの定義のみ）
+- CheckListから実際の作業を作成する際の雛形となる
 
 ### 🧾 CheckListItem
 
@@ -261,6 +294,7 @@ CheckListReferenceNote と CheckListLogNote の共通基底クラス。
 | **履歴情報** | 完了者・完了日時を記録し、操作トレーサビリティを確保。 |
 | **UI拡張性** | ツリー表示・展開／収束表示など、再帰的UI描画を想定。 |
 | **テンプレート管理** | CheckList と CheckListTemplate を分離し、バージョン管理を可能に。 |
+| **構造の分離** | CheckListStructure と CheckListTemplateStructure を分離し、テンプレート定義と作業進捗を明確に区別。 |
 | **抽象化** | CheckListBase と CheckListBaseNote で共通機能を整理。 |
 | **ファイル管理** | NoteFileAttachment を使用して、ノートとファイルの多対多関係を実現。 |
 
@@ -268,8 +302,11 @@ CheckListReferenceNote と CheckListLogNote の共通基底クラス。
 
 - CheckList と CheckListTemplate を分離し、テンプレートのバージョン管理をサポート。
 - CheckListBase と CheckListBaseNote という抽象基底クラスを導入し、共通機能を整理。
+- CheckListStructure と CheckListTemplateStructure を分離し、テンプレート定義と実際の作業を明確に区別。
+- CheckListTemplateStructure はチェック状態を持たず、テンプレートの階層構造定義のみを担当。
+- CheckListStructure はチェック状態を持ち、実際の作業の進捗管理を担当。
 - FileResource は「誰が参照しているか」を持たず、中立的リソースとして扱う。
 - NoteFileAttachment を使用して、ノートとファイルの多対多関係を実現し、表示順序と添付日時を管理。
-- CheckListStructure は無段階ツリー構造を完全サポートするため、Parent と Child 両方を保持。
+- CheckListStructure と CheckListTemplateStructure は無段階ツリー構造を完全サポートするため、Parent と Child 両方を保持。
 - IsCompleted / CompletedAt / CompletedBy により、簡潔かつ履歴可能なチェック状態を実現。
 - 全エンティティはシンプルな1対多・1対1の関係を維持し、再利用性を重視。
