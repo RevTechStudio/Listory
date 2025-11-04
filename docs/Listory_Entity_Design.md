@@ -25,8 +25,8 @@ erDiagram
     CheckListStructure ||--o{ CheckListStructure : has_children
     CheckListStructure }o--|| CheckListStructure : parent
     CheckListStructure }o--|| CheckListItem : references
-    CheckListItem ||--|| CheckListReferenceNote : has
-    CheckListStructure ||--|| CheckListLogNote : has
+    CheckListItem ||--o| CheckListReferenceNote : has
+    CheckListStructure ||--o| CheckListLogNote : has
     CheckListReferenceNote ||--o{ FileResource : attaches
     CheckListLogNote ||--o{ FileResource : attaches
 ```
@@ -42,6 +42,7 @@ erDiagram
 | Id | Guid | 一意識別子 |
 | Name | string | チェックリスト名 |
 | Description | string | チェックリストの説明 |
+| IsTemplate | bool | テンプレートフラグ（デフォルト: false） |
 | Structures | ICollection<CheckListStructure> | チェックリストの構成要素 |
 
 ---
@@ -58,7 +59,7 @@ erDiagram
 | ParentStructureId | Guid? | 親ノードのID（ルートの場合はnull） |
 | ParentStructure | CheckListStructure? | 親構成への参照 |
 | ChildStructures | ICollection<CheckListStructure> | 子構成リスト |
-| Record | CheckListLogNote | 実行時のログ情報 |
+| Record | CheckListLogNote? | 実行時のログ情報（未記録の場合はnull） |
 | IsChecked | bool | チェック完了状態 |
 | CompletedAt | DateTime? | 完了日時 |
 | CompletedBy | string? | 完了者 |
@@ -89,8 +90,8 @@ erDiagram
 | プロパティ | 型 | 説明 |
 |-------------|----|------|
 | Id | Guid | 一意識別子 |
-| Title | string? | タイトル |
-| Content | string? | 内容 |
+| Title | string | タイトル |
+| Content | string | 内容 |
 | Files | ICollection<FileResource> | 添付ファイル群 |
 
 #### CheckListReferenceNote
