@@ -1,10 +1,10 @@
-﻿namespace Listory.Core.Models;
+namespace Listory.Core.Models;
 
 
 /// <summary>
-/// チェック実行時の記録情報
+/// チェック実行時のログ情報
 /// </summary>
-public class CheckListRecord : CheckListBaseNote
+public class CheckListLogNote : CheckListBaseNote
 {
     public Guid CheckListStructureId { get; set; }
     public CheckListStructure CheckListStructure { get; set; } = null!;

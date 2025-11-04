@@ -20,7 +20,7 @@ public class CheckListStructure
     public ICollection<CheckListStructure> ChildStructures { get; set; } = [];
 
     // 記録情報
-    public CheckListRecord? Record { get; set; }
+    public CheckListLogNote? Record { get; set; }
 
     // 状態情報
     public bool IsChecked { get; set; }

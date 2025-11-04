@@ -25,10 +25,10 @@ erDiagram
     CheckListStructure ||--o{ CheckListStructure : has_children
     CheckListStructure }o--|| CheckListStructure : parent
     CheckListStructure }o--|| CheckListItem : references
-    CheckListItem ||--|| CheckListNote : has
-    CheckListStructure ||--|| CheckListRecord : has
-    CheckListNote ||--o{ FileResource : attaches
-    CheckListRecord ||--o{ FileResource : attaches
+    CheckListItem ||--|| CheckListReferenceNote : has
+    CheckListStructure ||--|| CheckListLogNote : has
+    CheckListReferenceNote ||--o{ FileResource : attaches
+    CheckListLogNote ||--o{ FileResource : attaches
 ```
 
 ---
@@ -58,7 +58,7 @@ erDiagram
 | ParentStructureId | Guid? | 親ノードのID（ルートの場合はnull） |
 | ParentStructure | CheckListStructure? | 親構成への参照 |
 | ChildStructures | ICollection<CheckListStructure> | 子構成リスト |
-| Record | CheckListRecord | 実行時の記録情報 |
+| Record | CheckListLogNote | 実行時のログ情報 |
 | IsChecked | bool | チェック完了状態 |
 | CompletedAt | DateTime? | 完了日時 |
 | CompletedBy | string? | 完了者 |
@@ -78,13 +78,13 @@ erDiagram
 | Id | Guid | 一意識別子 |
 | Name | string | 項目名 |
 | Description | string? | 項目説明 |
-| Note | CheckListNote? | 定義時の補足情報 |
+| Note | CheckListReferenceNote? | 定義時の参照情報 |
 
 ---
 
-### 🗒️ CheckListNote / CheckListRecord
+### 🗒️ CheckListReferenceNote / CheckListLogNote
 
-#### 共通構造（抽象概念）
+#### 共通構造（CheckListBaseNote）
 
 | プロパティ | 型 | 説明 |
 |-------------|----|------|
@@ -93,14 +93,14 @@ erDiagram
 | Content | string? | 内容 |
 | Files | ICollection<FileResource> | 添付ファイル群 |
 
-#### CheckListNote
+#### CheckListReferenceNote
 
-- チェック項目作成時に登録する補足情報（説明・注意事項など）
+- チェック項目作成時に登録する参照情報（手順書的な補足・注意事項など）
 - `CheckListItem` に属する。
 
-#### CheckListRecord
+#### CheckListLogNote
 
-- チェック実施時に記録される情報（メモ・備考など）
+- チェック実施時に記録されるログ情報（メモ・備考など）
 - `CheckListStructure` に属する。
 
 ---
@@ -117,7 +117,7 @@ erDiagram
 #### FileResourceの特徴
 
 - **中立的なリソース**として設計され、どのエンティティが使用しているかは持たない。
-- `CheckListNote` または `CheckListRecord` からのみ参照される。
+- `CheckListReferenceNote` または `CheckListLogNote` からのみ参照される。
 - 将来的に外部ストレージ（Blob / S3 など）への移行を想定。
 
 ---
