@@ -61,6 +61,7 @@ erDiagram
         Guid CheckListId
         Guid CheckListItemId
         Guid ParentStructureId
+        int Order
         bool IsCompleted
         DateTime CompletedAt
         string CompletedBy
@@ -71,6 +72,7 @@ erDiagram
         Guid CheckListTemplateId
         Guid CheckListItemId
         Guid ParentStructureId
+        int Order
     }
 
     CheckListItem {
@@ -171,6 +173,7 @@ CheckList と CheckListTemplate の共通基底クラス。
 | ParentStructureId | Guid? | 親ノードのID（ルートの場合はnull） |
 | ParentStructure | CheckListStructure? | 親構成への参照 |
 | ChildStructures | ICollection\<CheckListStructure\> | 子構成リスト |
+| Order | int | 同一親内での表示順序（0始まり） |
 | LogNote | CheckListLogNote? | 記録情報（未記録の場合はnull） |
 | IsCompleted | bool | チェック完了状態 |
 | CompletedAt | DateTime? | 完了日時 |
@@ -196,6 +199,7 @@ CheckList と CheckListTemplate の共通基底クラス。
 | ParentStructureId | Guid? | 親ノードのID（ルートの場合はnull） |
 | ParentStructure | CheckListTemplateStructure? | 親構成への参照 |
 | ChildStructures | ICollection\<CheckListTemplateStructure\> | 子構成リスト |
+| Order | int | 同一親内での表示順序（0始まり） |
 
 #### CheckListTemplateStructureの特徴
 
@@ -289,6 +293,7 @@ CheckListReferenceNote と CheckListLogNote の共通基底クラス。
 | 項目 | 内容 |
 |------|------|
 | **階層構造** | `ParentStructure` と `ChildStructures` の両方を保持。 |
+| **表示順序管理** | `Order` プロパティで同一親内の兄弟ノード表示順序を管理（0始まり）。 |
 | **参照方向** | FileResource は一方向参照のみ。循環参照を避ける。 |
 | **削除ポリシー** | 子要素を自動削除しない（OnDelete.Restrict 推奨）。 |
 | **履歴情報** | 完了者・完了日時を記録し、操作トレーサビリティを確保。 |
@@ -308,5 +313,6 @@ CheckListReferenceNote と CheckListLogNote の共通基底クラス。
 - FileResource は「誰が参照しているか」を持たず、中立的リソースとして扱う。
 - NoteFileAttachment を使用して、ノートとファイルの多対多関係を実現し、表示順序と添付日時を管理。
 - CheckListStructure と CheckListTemplateStructure は無段階ツリー構造を完全サポートするため、Parent と Child 両方を保持。
+- Order プロパティにより、同一親内での兄弟ノードの表示順序を明示的に管理。
 - IsCompleted / CompletedAt / CompletedBy により、簡潔かつ履歴可能なチェック状態を実現。
 - 全エンティティはシンプルな1対多・1対1の関係を維持し、再利用性を重視。
