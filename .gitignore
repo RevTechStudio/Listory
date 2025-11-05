@@ -420,3 +420,6 @@ FodyWeavers.xsd
 # RevTechStudio sdd working folder
 .spec/
 .memo/
+
+# Jetbrains Rider
+.idea/
