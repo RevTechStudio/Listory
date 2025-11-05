@@ -24,4 +24,14 @@ public class CheckListItem
     /// リファレンスノート
     /// </summary>
     public CheckListReferenceNote? ReferenceNote { get; set; }
+
+    /// <summary>
+    /// このチェック項目を使用しているチェックリスト構成
+    /// </summary>
+    public ICollection<CheckListStructure> CheckListUsages { get; set; } = [];
+
+    /// <summary>
+    /// このチェック項目を使用しているテンプレート構成
+    /// </summary>
+    public ICollection<CheckListTemplateStructure> TemplateUsages { get; set; } = [];
 }
